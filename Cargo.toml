@@ -1,6 +1,6 @@
 [package]
 name = "dupefinder"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description="A duplicate file finding utility library that supports directory recursion, multiple directories, and specific file duplicate searching."
 repository = "https://github.com/vgo0/dupefinder"
