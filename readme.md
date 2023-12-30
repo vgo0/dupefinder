@@ -28,6 +28,14 @@ and large file quantities stopping on a specific error was not desired.
 
 There is an additional `.run_for_file()` mode that will only search for duplicates of a specific file.
 
+# Install
+`cargo add dupefinder`
+
+https://crates.io/crates/dupefinder
+
+# Docs
+https://docs.rs/dupefinder/latest/dupefinder/
+
 # Examples
 ## Non-recursive
 ```
