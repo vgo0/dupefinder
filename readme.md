@@ -1,3 +1,5 @@
+[![Rust](https://github.com/vgo0/dupefinder/actions/workflows/rust.yml/badge.svg)](https://github.com/vgo0/dupefinder/actions/workflows/rust.yml)
+
 # Dupe Finder
 `dupefinder` is a utility for finding duplicate files within
 a set of folders. The contents of each folder are evaluated against
