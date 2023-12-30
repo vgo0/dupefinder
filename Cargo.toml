@@ -6,7 +6,7 @@ description="A duplicate file finding utility library that supports directory re
 repository = "https://github.com/vgo0/dupefinder"
 homepage = "https://github.com/vgo0/dupefinder"
 license = "MIT"
-keywords = ["dupe", "dupes", "duplicate-files", "duplicate-file-finder", "duplicates"]
+keywords = ["dupe", "dupes", "duplicate-files", "dupe-file-finder", "duplicates"]
 
 [dependencies]
 log = "0.4.20"
