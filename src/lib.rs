@@ -8,12 +8,12 @@
 //! This utility works by parsing file metadata within the provided
 //! folders and grouping together all files with the same size in bytes.
 //! Once sizes with multiple file entries are located, the file contents are 
-//! hashed via Sha256 and compared to the hash of other same-size files.
+//! hashed via XXH3 / xxHash and compared to the hash of other same-size files.
 //! 
 //! If only a single file of a certain size is found that file is not read and is skipped.
 //! This does read the entire file contents from disk while generating the hash.
 //! 
-//! Hashing makes use of the `sha2` crate's compatibility with `Read`able object
+//! Hashing makes use of a BufReader to incrementally read large files
 //! which should prevent having to read the entirety of a file into memory at once to generate the hash.
 //! 
 //! If a matching hash is found, a duplicate file has been found and will be returned.
@@ -475,7 +475,7 @@ mod tests {
 
         if let Some(duplicate) = duplicate {
             assert_eq!(duplicate.size, known_size);
-            assert_eq!(duplicate.hash, String::from("AE040FB6B2256BD5CEADF0CA34262BAB9460B46613C718F86A47D5F657BAEC78"));
+            assert_eq!(duplicate.hash, String::from("1577245F909F3D4619DDA56A7B4BA1AF"));
             assert_eq!(duplicate.files.len(), 2);
             assert!(duplicate.files.contains(&ff_path.display().to_string()));
         };
@@ -513,7 +513,7 @@ mod tests {
 
         if let Some(duplicate) = duplicate {
             assert_eq!(duplicate.size, known_size);
-            assert_eq!(duplicate.hash, String::from("AE040FB6B2256BD5CEADF0CA34262BAB9460B46613C718F86A47D5F657BAEC78"));
+            assert_eq!(duplicate.hash, String::from("1577245F909F3D4619DDA56A7B4BA1AF"));
             assert_eq!(duplicate.files.len(), 3);
             assert!(duplicate.files.contains(&ff_path.display().to_string()));
         };

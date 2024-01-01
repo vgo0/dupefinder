@@ -1,6 +1,6 @@
 [package]
 name = "dupefinder"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 description="A duplicate file finding utility library that supports directory recursion, multiple directories, and specific file duplicate searching."
 repository = "https://github.com/vgo0/dupefinder"
@@ -10,4 +10,7 @@ keywords = ["dupe", "dupes", "duplicate-files", "dupe-file-finder", "duplicates"
 
 [dependencies]
 log = "0.4.20"
-sha2 = "0.10.8"
+
+[dependencies.xxhash-rust]
+version = "0.8.8"
+features = ["xxh3"]

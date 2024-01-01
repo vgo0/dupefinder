@@ -9,13 +9,12 @@ also exists as 'b.jpg' in folder 'two' that will be considered a match.
 This utility works by parsing file metadata within the provided
 folders and grouping together all files with the same size in bytes.
 Once sizes with multiple file entries are located, the file contents are 
-hashed via Sha256 and compared to the hash of other same-size files.
+hashed via XXH3 / xxHash and compared to the hash of other same-size files.
 
 If only a single file of a certain size is found that file is not read and is skipped.
 This does read the entire file contents from disk while generating the hash.
 
-Hashing makes use of the `sha2` crate's compatibility with `Read`able object
-which should prevent having to read the entirety of a file into memory at once to generate the hash.
+Hashing makes use of a BufReader to incrementally read large files which should prevent having to read the entirety of a file into memory at once to generate the hash.
 
 If a matching hash is found, a duplicate file has been found and will be returned.
 

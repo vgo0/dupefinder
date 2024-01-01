@@ -33,7 +33,7 @@ mod tests {
         assert!(find_file.is_ok(), "no io error expected");
 
         if let Ok(find_file) = find_file {
-            assert_eq!(find_file.hash, String::from("AE040FB6B2256BD5CEADF0CA34262BAB9460B46613C718F86A47D5F657BAEC78"));
+            assert_eq!(find_file.hash, String::from("1577245F909F3D4619DDA56A7B4BA1AF"));
             assert_eq!(find_file.data.size, 100);
             assert_eq!(find_file.data.path, path);
         };

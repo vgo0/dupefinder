@@ -1,7 +1,8 @@
 use std::{io, path::PathBuf};
-use sha2::{Sha256, Digest};
+use std::io::{BufRead, BufReader};
+use xxhash_rust::xxh3::Xxh3;
 
-/// Convenience trait to generate a Sha256 hash of the file contents
+/// Convenience trait to generate a XXH3 hash of the file contents
 /// located in the path specified by a `String` / `&str` / `PathBuf`.
 /// # Examples
 /// ```
@@ -57,19 +58,21 @@ impl Hashable for &str {
 }
 
 fn generate_file_hash(path: PathBuf) -> Result<String, io::Error> {
-    let mut file = match std::fs::File::open(path) {
-        Ok(val) => val,
-        Err(e) => {
-            return Err(e);
-        }
-    };
+    let file = std::fs::File::open(path)?;
+    let mut file = BufReader::with_capacity(262144 , file);
 
-    let mut hasher = Sha256::new();
-    if let Err(e) = io::copy(&mut file, &mut hasher) {
-        return Err(e);
+    let mut hasher = Xxh3::default();
+    loop {
+        let buf = file.fill_buf()?;
+        let buf_len = buf.len();
+        if buf_len == 0 {
+            break;
+        }
+        hasher.update(buf);
+        file.consume(buf_len);
     }
 
-    Ok(format!("{:X}", hasher.finalize()))
+    Ok(format!("{:X}", hasher.digest128()))
 }
 
 
@@ -84,7 +87,7 @@ mod tests {
         let path: std::path::PathBuf = [env!("CARGO_MANIFEST_DIR"), "resources", "dupes","a.txt"].iter().collect();
         let hash = generate_file_hash(path);
         assert!(hash.is_ok(), "no io error should occur");
-        assert_eq!(hash.unwrap(), String::from("AE040FB6B2256BD5CEADF0CA34262BAB9460B46613C718F86A47D5F657BAEC78"));
+        assert_eq!(hash.unwrap(), String::from("1577245F909F3D4619DDA56A7B4BA1AF"));
     }
 
     #[test]
@@ -96,7 +99,7 @@ mod tests {
         if let Some(path_str_val) = path_str {
             let hash = path_str_val.get_file_hash();
             assert!(hash.is_ok(), "no io error should occur");
-            assert_eq!(hash.unwrap(), String::from("AE040FB6B2256BD5CEADF0CA34262BAB9460B46613C718F86A47D5F657BAEC78"));
+            assert_eq!(hash.unwrap(), String::from("1577245F909F3D4619DDA56A7B4BA1AF"));
         }
     }
 
@@ -107,7 +110,7 @@ mod tests {
 
         let hash = path_string.get_file_hash();
         assert!(hash.is_ok(), "no io error should occur");
-        assert_eq!(hash.unwrap(), String::from("AE040FB6B2256BD5CEADF0CA34262BAB9460B46613C718F86A47D5F657BAEC78"));
+        assert_eq!(hash.unwrap(), String::from("1577245F909F3D4619DDA56A7B4BA1AF"));
     }
 
     #[test]
@@ -116,7 +119,7 @@ mod tests {
 
         let hash = path.get_file_hash();
         assert!(hash.is_ok(), "no io error should occur");
-        assert_eq!(hash.unwrap(), String::from("AE040FB6B2256BD5CEADF0CA34262BAB9460B46613C718F86A47D5F657BAEC78"));
+        assert_eq!(hash.unwrap(), String::from("1577245F909F3D4619DDA56A7B4BA1AF"));
     }
 
     #[test]
